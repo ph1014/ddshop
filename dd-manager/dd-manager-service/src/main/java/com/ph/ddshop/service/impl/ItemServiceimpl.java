@@ -1,7 +1,11 @@
 package com.ph.ddshop.service.impl;
 
+import com.ph.ddshop.common.dto.Page;
+import com.ph.ddshop.common.dto.Result;
 import com.ph.ddshop.dao.TbItemMapper;
+import com.ph.ddshop.dao.TbItemMapperCustom;
 import com.ph.ddshop.pojo.po.TbItem;
+import com.ph.ddshop.pojo.vo.TbitemCustom;
 import com.ph.ddshop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +21,26 @@ public class ItemServiceimpl implements ItemService {
 
     @Autowired
     private TbItemMapper tbitemdao;
+    @Autowired
+    private TbItemMapperCustom customdao;
     @Override
     public TbItem findByItemId(Long itemid) {
         return tbitemdao.selectByPrimaryKey(itemid);
+    }
+
+    @Override
+    public Result<TbitemCustom> selectItemsBypage(Page page) {
+        Result<TbitemCustom> result = null;
+
+        try {
+            result = new Result<TbitemCustom>();
+            int total = customdao.countitem();
+            result.setTotal(total);
+            result.setRows(customdao.selectItemByPage(page));
+        }catch (Exception e){
+
+        }
+             return  result;
+
     }
 }

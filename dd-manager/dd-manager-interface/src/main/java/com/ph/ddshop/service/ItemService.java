@@ -1,6 +1,9 @@
 package com.ph.ddshop.service;
 
+import com.ph.ddshop.common.dto.Page;
+import com.ph.ddshop.common.dto.Result;
 import com.ph.ddshop.pojo.po.TbItem;
+import com.ph.ddshop.pojo.vo.TbitemCustom;
 
 /**
  * User: jack
@@ -11,4 +14,7 @@ import com.ph.ddshop.pojo.po.TbItem;
 
 public interface ItemService {
     TbItem findByItemId(Long itemid);
+
+
+    Result<TbitemCustom> selectItemsBypage(Page page);
 }

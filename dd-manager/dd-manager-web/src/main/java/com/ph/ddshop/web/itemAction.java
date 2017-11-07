@@ -1,7 +1,10 @@
 package com.ph.ddshop.web;
 
 
+import com.ph.ddshop.common.dto.Page;
+import com.ph.ddshop.common.dto.Result;
 import com.ph.ddshop.pojo.po.TbItem;
+import com.ph.ddshop.pojo.vo.TbitemCustom;
 import com.ph.ddshop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -40,6 +43,15 @@ public class itemAction {
     @RequestMapping("/{page}")
     public String doindex1(@PathVariable("page") String page){
         return page;
+    }
+
+
+    @RequestMapping("/items")
+    @ResponseBody
+    public Result<TbitemCustom> doindex2(Page page){
+        System.out.println(page.getPage()+"---"+page.getRows());
+        Result<TbitemCustom> list = itemservice.selectItemsBypage(page);
+        return list;
     }
 
 

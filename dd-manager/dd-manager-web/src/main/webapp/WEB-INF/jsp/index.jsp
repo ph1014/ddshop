@@ -57,7 +57,6 @@
 <script>
     //ddshop.registerMenuEvent();
     $(function () {
-
         //约定大于配置：jquery对象前面加上$,如果是DOM对象不需要加$
         var $tree = $('#menu .easyui-tree');
         //将当前树打印到控制台
@@ -70,7 +69,6 @@
                 $('#tab').tabs('add',{
                     title: text,
                     href: href,
-
                     closable:true
                 });
             },
