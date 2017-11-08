@@ -1,6 +1,7 @@
 package com.ph.ddshop.web;
 
 
+import com.ph.ddshop.common.dto.Order;
 import com.ph.ddshop.common.dto.Page;
 import com.ph.ddshop.common.dto.Result;
 import com.ph.ddshop.pojo.po.TbItem;
@@ -9,10 +10,9 @@ import com.ph.ddshop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * User: jack
@@ -48,10 +48,30 @@ public class itemAction {
 
     @RequestMapping("/items")
     @ResponseBody
-    public Result<TbitemCustom> doindex2(Page page){
+    public Result<TbitemCustom> doindex2(Page page,Order order){
         System.out.println(page.getPage()+"---"+page.getRows());
-        Result<TbitemCustom> list = itemservice.selectItemsBypage(page);
+        Result<TbitemCustom> list = itemservice.selectItemsBypage(page,order);
         return list;
+    }
+
+    @RequestMapping(value = "/items/batch",method = RequestMethod.POST)
+    @ResponseBody
+    public int doindex3(@RequestParam ("ids[]") List<Long> ids){
+
+            return itemservice.updateItemsByIds(ids);
+    }
+
+    @RequestMapping(value = "items/up",method = RequestMethod.POST)
+    @ResponseBody
+    public int doindex4(@RequestParam ("ids[]") List<Long> ids){
+
+        return itemservice.updateItemsByUp(ids);
+    }
+    @RequestMapping(value = "items/down",method = RequestMethod.POST)
+    @ResponseBody
+    public int doindex5(@RequestParam ("ids[]") List<Long> ids){
+
+        return itemservice.updateItemsByDown(ids);
     }
 
 

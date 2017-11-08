@@ -1,9 +1,12 @@
 package com.ph.ddshop.service;
 
+import com.ph.ddshop.common.dto.Order;
 import com.ph.ddshop.common.dto.Page;
 import com.ph.ddshop.common.dto.Result;
 import com.ph.ddshop.pojo.po.TbItem;
 import com.ph.ddshop.pojo.vo.TbitemCustom;
+
+import java.util.List;
 
 /**
  * User: jack
@@ -16,5 +19,11 @@ public interface ItemService {
     TbItem findByItemId(Long itemid);
 
 
-    Result<TbitemCustom> selectItemsBypage(Page page);
+    Result<TbitemCustom> selectItemsBypage(Page page, Order order);
+
+    int updateItemsByIds(List<Long> ids);
+
+    int updateItemsByUp(List<Long> ids);
+
+    int updateItemsByDown(List<Long> ids);
 }

@@ -4,21 +4,37 @@
 
   <sql id="Base_Column_List" >
     i.id, i.title, i.sell_point as sellPoint, i.price, i.num, i.barcode, i.image,
-    i.cid, i.status, i.created, i.updated,c.name as catname
+    i.cid, i.created, i.updated,c.name as catname,i.status,
+    CASE i.status
+		WHEN 1 THEN "正常"
+		WHEN 2 THEN "下架"
+		WHEN 3 THEN "删除"
+		ELSE "未知" END as statusName
   </sql>
 
 <select id="countitem" resultType="int">
-  SELECT COUNT(1) FROM tb_item;
+  SELECT COUNT(1) FROM tb_item
+   WHERE status != 3
 </select>
 
-  <select id="selectItemByPage" resultType="com.ph.ddshop.pojo.vo.TbitemCustom" parameterType="com.ph.ddshop.common.dto.Page">
+  <select id="selectItemByPage" resultType="com.ph.ddshop.pojo.vo.TbitemCustom">
     SELECT
     <include refid="Base_Column_List" />
     FROM tb_item i
     LEFT JOIN tb_item_cat c
     ON i.cid = c.id
-    ORDER BY i.id DESC
-    limit #{offset},#{rows}
+    WHERE i.status != 3
+<choose>
+    <when test="order != null and order.sort != null and order.order != null">
+        <foreach collection="order.orderParams" item="item" open="order by" close="" separator=",">
+          i.${item}
+        </foreach>
+    </when>
+    <otherwise>
+        ORDER BY i.id DESC
+    </otherwise>
+</choose>
+      limit #{page.offset},#{page.rows}
   </select>
 
 </mapper>
