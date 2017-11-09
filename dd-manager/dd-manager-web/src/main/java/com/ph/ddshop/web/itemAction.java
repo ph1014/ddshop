@@ -5,6 +5,7 @@ import com.ph.ddshop.common.dto.Order;
 import com.ph.ddshop.common.dto.Page;
 import com.ph.ddshop.common.dto.Result;
 import com.ph.ddshop.pojo.po.TbItem;
+import com.ph.ddshop.pojo.vo.TbItemQuery;
 import com.ph.ddshop.pojo.vo.TbitemCustom;
 import com.ph.ddshop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +49,9 @@ public class itemAction {
 
     @RequestMapping("/items")
     @ResponseBody
-    public Result<TbitemCustom> doindex2(Page page,Order order){
+    public Result<TbitemCustom> doindex2(Page page, Order order, TbItemQuery tbItemQuery){
         System.out.println(page.getPage()+"---"+page.getRows());
-        Result<TbitemCustom> list = itemservice.selectItemsBypage(page,order);
+        Result<TbitemCustom> list = itemservice.selectItemsBypage(page,order,tbItemQuery);
         return list;
     }
 

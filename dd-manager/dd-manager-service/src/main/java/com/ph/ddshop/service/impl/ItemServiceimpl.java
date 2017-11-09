@@ -7,6 +7,7 @@ import com.ph.ddshop.dao.TbItemMapper;
 import com.ph.ddshop.dao.TbItemMapperCustom;
 import com.ph.ddshop.pojo.po.TbItem;
 import com.ph.ddshop.pojo.po.TbItemExample;
+import com.ph.ddshop.pojo.vo.TbItemQuery;
 import com.ph.ddshop.pojo.vo.TbitemCustom;
 import com.ph.ddshop.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,13 @@ public class ItemServiceimpl implements ItemService {
     }
 
     @Override
-    public Result<TbitemCustom> selectItemsBypage(Page page,Order order) {
+    public Result<TbitemCustom> selectItemsBypage(Page page,Order order,TbItemQuery tbItemQuery) {
         Result<TbitemCustom> result = null;
         try {
             result = new Result<TbitemCustom>();
-            int total = customdao.countitem();
+            int total = customdao.countitem(tbItemQuery);
             result.setTotal(total);
-            List<TbitemCustom> list= customdao.selectItemByPage(page,order);
+            List<TbitemCustom> list= customdao.selectItemByPage(page,order,tbItemQuery);
             result.setRows(list);
         }catch (Exception e){
 

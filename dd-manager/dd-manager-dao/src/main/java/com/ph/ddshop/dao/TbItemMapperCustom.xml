@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ph.ddshop.dao.TbItemMapperCustom" >
+<mapper namespace="com.ph.ddshop.dao.TbItemMapperCustom">
 
-  <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
     i.id, i.title, i.sell_point as sellPoint, i.price, i.num, i.barcode, i.image,
     i.cid, i.created, i.updated,c.name as catname,i.status,
     CASE i.status
@@ -12,29 +12,48 @@
 		ELSE "未知" END as statusName
   </sql>
 
-<select id="countitem" resultType="int">
-  SELECT COUNT(1) FROM tb_item
-   WHERE status != 3
-</select>
+    <sql id="Where_Clause">
+        <where>
+            i.status != 3
+            <if test="tbItemQuery != null and tbItemQuery.title != null and tbItemQuery.title != ''">
+                and i.title like '%${tbItemQuery.title}%'
+            </if>
+            <if test="tbItemQuery != null and tbItemQuery.status != null and tbItemQuery.status != 0">
+                and i.status = #{tbItemQuery.status}
+            </if>
+        </where>
+    </sql>
 
-  <select id="selectItemByPage" resultType="com.ph.ddshop.pojo.vo.TbitemCustom">
-    SELECT
-    <include refid="Base_Column_List" />
-    FROM tb_item i
-    LEFT JOIN tb_item_cat c
-    ON i.cid = c.id
-    WHERE i.status != 3
-<choose>
-    <when test="order != null and order.sort != null and order.order != null">
-        <foreach collection="order.orderParams" item="item" open="order by" close="" separator=",">
-          i.${item}
-        </foreach>
-    </when>
-    <otherwise>
-        ORDER BY i.id DESC
-    </otherwise>
-</choose>
-      limit #{page.offset},#{page.rows}
-  </select>
+    <select id="countitem" resultType="int">
+        SELECT COUNT(1) FROM tb_item i
+        <include refid="Where_Clause"/>
+    </select>
+
+    <select id="selectItemByPage" resultType="com.ph.ddshop.pojo.vo.TbitemCustom">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tb_item i
+        LEFT JOIN tb_item_cat c
+        ON i.cid = c.id
+        <include refid="Where_Clause"/>
+        <choose>
+            <when test="order != null and order.sort != null and order.order != null">
+                <foreach collection="order.orderParams" item="item" open="order by" close="" separator=",">
+                    <if test="item== 'title desc'">
+                        CONVERT(i.title USING gbk) desc
+                    </if>
+                    <if test="item == 'title asc'">
+                        CONVERT(i.title USING gbk) asc
+                    </if>
+                    <if test="item != 'title desc' and item != 'title asc'">i.${item}</if>
+
+                </foreach>
+            </when>
+            <otherwise>
+                ORDER BY i.id DESC
+            </otherwise>
+        </choose>
+        limit #{page.offset},#{page.rows}
+    </select>
 
 </mapper>

@@ -2,16 +2,12 @@
 var ddshop = {
 
 
-    registerMenuEvent:function(){
+    registerMenuEvent: function () {
         alert("zzzz");
     },
-    pagesize:function () {
-/*        $.ajaxSetup (
-            {
-                async: false
-            });*/
+    pagesize: function () {
         $('#tb').datagrid({
-                  url:'items',
+                url:'items',
                 //隔行变色，斑马线效果
                 striped:true,
                 //添加分页工具栏
@@ -45,125 +41,7 @@ var ddshop = {
                         return moment(value).format("L");
                     }}
             ]],
-             toolbar : [{
-                 iconCls: 'icon-add',
-                 text: '新增',
-                 handler: function () {
-                     console.log('up');
-                 }
-             },{
-            iconCls: 'icon-edit',
-            text: '编辑',
-            handler: function () {
-                console.log('up');
-            }
-             },{
-                iconCls: 'icon-up',
-                text: '上架',
-                 handler: function () {
-                     var selectRows = $('#tb').datagrid('getSelections');
-                     if(selectRows.length == 0){
-                         $.messager.alert('提示','未选中记录','warning');
-                         return;
-                     }
-                     $.messager.confirm('确认','您确认想要上架商品吗？',function(r){
-                         if (r){
-                             //获取用户选中的记录
-                             var ids = [];
-                             for(var i=0;i< selectRows.length;i++){
-                                 ids.push(selectRows[i].id);
-                             }
-                             //异步提交给后台
-                             $.ajax({
-                                 url:"items/up",
-                                 type:"post",
-                                 data:{"ids[]":ids},
-                                 success:function(data){
-                                     if(data!=null){
-                                         $('#tb').datagrid('reload');
-                                     }
-                                 },
-                                 dataType:"json"
-                             });
-
-                         }
-                     });
-                 }
-            },{
-                iconCls: 'icon-down',
-                text: '下架',
-                 handler: function () {
-                     var selectRows = $('#tb').datagrid('getSelections');
-                     if(selectRows.length == 0){
-                         $.messager.alert('提示','未选中记录','warning');
-                         return;
-                     }
-                     $.messager.confirm('确认','您确认想要下架商品吗？',function(r){
-                         if (r){
-                             //获取用户选中的记录
-                             var ids = [];
-                             for(var i=0;i< selectRows.length;i++){
-                                 ids.push(selectRows[i].id);
-                             }
-                             //异步提交给后台
-                                $.post(
-                                    "items/down",
-                                   {"ids[]":ids},
-                                    function(data){
-                                        if(data!=null){
-                                            $('#tb').datagrid('reload');
-                                        }
-                                    },
-                                    "json"
-                                )
-                             // $.ajax({
-                             //     url:"items/down",
-                             //     type:"post",
-                             //     data:{"ids[]":ids},
-                             //     success:function(data){
-                             //         if(data!=null){
-                             //             $('#tb').datagrid('reload');
-                             //         }
-                             //     },
-                             //     dataType:"json"
-                             // });
-
-                         }
-                     });
-                 }
-            },{
-                 iconCls: 'icon-remove',
-                 text: '删除',
-                 handler: function () {
-                     var selectRows = $('#tb').datagrid('getSelections');
-                     if(selectRows.length == 0){
-                         $.messager.alert('提示','未选中记录','warning');
-                         return;
-                     }
-                     $.messager.confirm('确认','您确认想要删除记录吗？',function(r){
-                         if (r){
-                             //获取用户选中的记录
-                             var ids = [];
-                             for(var i=0;i< selectRows.length;i++){
-                                 ids.push(selectRows[i].id);
-                             }
-                             //异步提交给后台
-                             $.ajax({
-                                 url:"items/batch",
-                                 type:"post",
-                                 data:{"ids[]":ids},
-                                 success:function(data){
-                                     if(data!=null){
-                                         $('#tb').datagrid('reload');
-                                     }
-                                 },
-                                 dataType:"json"
-                             });
-
-                         }
-                     });
-                 }
-             }]
+             toolbar : "#toolbar"
         })
     }
 
