@@ -22,8 +22,8 @@
         <div title="商品管理" data-options="selected:true,iconCls:'icon-tip'" style="padding:10px 0;">
             <ul class="easyui-tree">
                 <li data-options="attributes:{'href':'item-add'}">新增商品</li>
-                <li data-options="attributes:{'href':'item-list'}">查询商品</li>
-                <li data-options="attributes:{'href':'item-param-list'}">规格参数</li>
+                <li data-options="attributes:{'href':'item-list'}">查询商品</li>s
+                <li data-options="attributes:{'href':'item-params-list'}">规格参数</li>
             </ul>
         </div>
         <div title="网站内容管理" data-options="iconCls:'icon-tip'" style="padding:10px 0;">
@@ -50,6 +50,13 @@
 <script src="js/jquery-easyui-1.5/jquery.easyui.min.js"></script>
 <script src="js/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
 <script src="js/moment/moment-with-locales.js"></script>
+
+<!-- 百度富文本编辑器 -->
+<!-- 配置文件 -->
+<script src="js/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script src="js/ueditor/ueditor.all.js"></script>
+
 <script>
     moment.locale('zh-cn');
 </script>

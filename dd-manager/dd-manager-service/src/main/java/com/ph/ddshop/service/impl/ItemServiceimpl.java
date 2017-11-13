@@ -3,16 +3,24 @@ package com.ph.ddshop.service.impl;
 import com.ph.ddshop.common.dto.Order;
 import com.ph.ddshop.common.dto.Page;
 import com.ph.ddshop.common.dto.Result;
+import com.ph.ddshop.common.unit.IDUtils;
+import com.ph.ddshop.dao.TbItemDescMapper;
 import com.ph.ddshop.dao.TbItemMapper;
 import com.ph.ddshop.dao.TbItemMapperCustom;
 import com.ph.ddshop.pojo.po.TbItem;
+import com.ph.ddshop.pojo.po.TbItemCat;
+import com.ph.ddshop.pojo.po.TbItemDesc;
 import com.ph.ddshop.pojo.po.TbItemExample;
 import com.ph.ddshop.pojo.vo.TbItemQuery;
 import com.ph.ddshop.pojo.vo.TbitemCustom;
 import com.ph.ddshop.service.ItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,10 +32,16 @@ import java.util.List;
 @Service
 public class ItemServiceimpl implements ItemService {
 
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private TbItemMapper tbitemdao;
     @Autowired
     private TbItemMapperCustom customdao;
+    @Autowired
+    private TbItemDescMapper tbItemDessdao;
+
+
     @Override
     public TbItem findByItemId(Long itemid) {
         return tbitemdao.selectByPrimaryKey(itemid);
@@ -77,5 +91,32 @@ public class ItemServiceimpl implements ItemService {
         TbItemExample.Criteria criteria = example.createCriteria();
         criteria.andIdIn(ids);
         return tbitemdao.updateByExampleSelective(record,example);
+    }
+
+    @Override
+    @Transactional
+    public int saveItem(TbItem tbItem, String content) {
+        int i = 0;
+        try {
+            Long itemId = IDUtils.getItemId();
+
+            tbItem.setId(itemId);
+            tbItem.setCreated(new Date());
+            tbItem.setUpdated(new Date());
+            tbItem.setStatus((byte)2);
+            i = tbitemdao.insert(tbItem);
+
+            TbItemDesc desc = new TbItemDesc();
+            desc.setItemId(itemId);
+            desc.setItemDesc(content);
+            desc.setCreated(new Date());
+            desc.setUpdated(new Date());
+            i += tbItemDessdao.insert(desc);
+
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
+        return i;
     }
 }

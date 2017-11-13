@@ -8,6 +8,8 @@ import com.ph.ddshop.pojo.po.TbItem;
 import com.ph.ddshop.pojo.vo.TbItemQuery;
 import com.ph.ddshop.pojo.vo.TbitemCustom;
 import com.ph.ddshop.service.ItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ import java.util.List;
 @Scope("prototype")
 public class itemAction {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private ItemService itemservice;
 
@@ -75,5 +78,18 @@ public class itemAction {
         return itemservice.updateItemsByDown(ids);
     }
 
+    @RequestMapping(value = "itemadd",method = RequestMethod.POST)
+    @ResponseBody
+    public int doindex6(String content,TbItem tbItem) {
+        int i = 0;
+        try {
+            i = itemservice.saveItem(tbItem, content);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        }
+        return i;
+
+    }
 
 }

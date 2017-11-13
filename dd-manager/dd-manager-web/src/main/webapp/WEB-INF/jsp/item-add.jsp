@@ -24,7 +24,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="label">商品价格：</td>
+                <td class="label">商品价格(元)：</td>
                 <td>
                     <input class="easyui-numberbox" type="text" id="priceView" name="priceView"
                            data-options="required:true,min:0,precision:2">
@@ -74,6 +74,10 @@
     </form>
 </div>
 <script>
+    var ue = UE.getEditor('container',{
+        initialFrameWidth: '100%',
+        initialFrameHeight: '400'
+    });
     $("#cid").combotree({
         url:'itemCat?parentid=0',
         required:true,
@@ -90,8 +94,24 @@
             }
         }
     })
-
-
-
+   function submitForm() {
+        $("#itemAddForm").form('submit',{
+            url:"itemadd",
+            onSubmit:function () {
+                $("#price").val($("#priceView").val()*100);
+                return $(this).form('validate');
+            },
+            success:function (data) {
+                if(data>0){
+                    $.messager.alert('恭喜', '添加成功！');
+                    addTab("item-list","查询商品")
+                }
+            }
+        })
+   }
+    function clearForm(){
+        $("#itemAddForm").form("reset");
+        ue.setContent('商品描述');
+    }
 
 </script>
