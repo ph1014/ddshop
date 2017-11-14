@@ -80,10 +80,10 @@ public class itemAction {
 
     @RequestMapping(value = "itemadd",method = RequestMethod.POST)
     @ResponseBody
-    public int doindex6(String content,TbItem tbItem) {
+    public int doindex6(String content,TbItem tbItem,String paramData) {
         int i = 0;
         try {
-            i = itemservice.saveItem(tbItem, content);
+            i = itemservice.saveItem(tbItem, content,paramData);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();

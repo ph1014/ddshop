@@ -74,23 +74,56 @@
     </form>
 </div>
 <script>
+    UE.delEditor("container");
     var ue = UE.getEditor('container',{
         initialFrameWidth: '100%',
         initialFrameHeight: '400'
     });
     $("#cid").combotree({
-        url:'itemCat?parentid=0',
-        required:true,
-        onBeforeExpand:function (node) {
+        url: 'itemCat?parentid=0',
+        required: true,
+        onBeforeExpand: function (node) {
             var $tree = $("#cid").combotree("tree");
             var option = $tree.tree("options");
-            option.url="itemCat?parentid="+node.id;
+            option.url = "itemCat?parentid=" + node.id;
         },
-        onBeforeSelect:function (node) {
-            var isLeaf = $("#cid").tree("isLeaf",node.target);
-            if(!isLeaf){
+        onBeforeSelect: function (node) {
+            var isLeaf = $("#cid").tree("isLeaf", node.target);
+            if (!isLeaf) {
                 $.messager.alert('警告', '请选中最终的类别！', 'warning');
                 return false;
+            } else {
+                $.get(
+                    "item/param/save/" + node.id,
+                    function (data) {
+                        var mytd = $("#itemAddForm .paramsShow td").eq(1);
+                        var $ul = $('<ul>');
+                        mytd.empty().append($ul);
+                        if (data) {
+                            var paramData = data.paramData;
+                            paramData = JSON.parse(paramData);
+                            $.each(paramData, function (i, e) {
+                                var $li = $('<li>');
+                                var $table = $('<table>');
+                                var $tr = $('<tr>');
+                                var $td = $('<td colspan="2" class="group">' + e.group + '</td>');
+                                $ul.append($li);
+                                $li.append($table);
+                                $table.append($tr);
+                                $tr.append($td);
+                                if (e.params) {
+                                    $.each(e.params, function (_i, paramName) {
+                                        var _$tr = $('<tr><td class="param">' + paramName + '</td><td><input></td></tr>');
+                                        $table.append(_$tr);
+                                    });
+                                }
+                            });
+                            $("#itemAddForm .paramsShow").show();
+                        } else {
+                            $("#itemAddForm .paramsShow").hide();
+                            $("#itemAddForm .paramsShow td").eq(1).empty();//第二个td
+                        }
+                    })
             }
         }
     })
@@ -99,12 +132,37 @@
             url:"itemadd",
             onSubmit:function () {
                 $("#price").val($("#priceView").val()*100);
+                var paramsJson = [];
+                var $liList=$("#itemAddForm .paramsShow li");
+                $liList.each(function (i,e) {
+                    $group = $(e).find('.group');
+                    var group = $group.text();
+                    var params =[];
+                   $params=$(e).find('tr').has('td.param');
+                   $params.each(function (_i,_e) {
+                       var $key=$(_e).find('.param');
+                       var $value=$key.next('td').find('input');
+                       var key=$key.text();
+                       var value=$value.val();
+                       var o_={
+                           k:key,
+                           v:value
+                       };
+                       params.push(o_);
+                   });
+                    paramsJson.push(group);
+                   paramsJson.push(params);
+                });
+                paramsJson = JSON.stringify(paramsJson);
+                $('#paramData').val(paramsJson);
                 return $(this).form('validate');
             },
             success:function (data) {
                 if(data>0){
                     $.messager.alert('恭喜', '添加成功！');
-                    addTab("item-list","查询商品")
+                    closetab ("新增商品");
+                    closetab("查询商品");
+                    addTab("item-list","查询商品");
                 }
             }
         })

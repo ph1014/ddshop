@@ -31,6 +31,10 @@ function add() {
     addTab("item-add","新增商品")
 }
 
+function closetab(title) {
+    $("#tab").tabs("close",title);
+}
+
 function edit() {
 }
 

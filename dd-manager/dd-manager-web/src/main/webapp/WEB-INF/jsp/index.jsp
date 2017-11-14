@@ -68,5 +68,6 @@
     ddshop.registerMenuEvent();
 
 </script>
+
 </body>
 </html>

@@ -28,5 +28,5 @@ public interface ItemService {
 
     int updateItemsByDown(List<Long> ids);
 
-    int saveItem(TbItem tbItem, String content);
+    int saveItem(TbItem tbItem, String content,String paramData);
 }

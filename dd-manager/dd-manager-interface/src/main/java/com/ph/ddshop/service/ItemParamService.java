@@ -3,6 +3,7 @@ package com.ph.ddshop.service;
 import com.ph.ddshop.common.dto.Order;
 import com.ph.ddshop.common.dto.Page;
 import com.ph.ddshop.common.dto.Result;
+import com.ph.ddshop.pojo.po.TbItemParam;
 import com.ph.ddshop.pojo.vo.TbItemParamCustom;
 
 /**
@@ -14,4 +15,8 @@ import com.ph.ddshop.pojo.vo.TbItemParamCustom;
 
 public interface ItemParamService {
     Result<TbItemParamCustom> listItemParam(Page page, Order order);
+
+    int saveItemParam(TbItemParam tbItemParam);
+
+    TbItemParam getTbItemParamByCid(Long cid);
 }
